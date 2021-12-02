@@ -19,15 +19,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "config": "^3.3.6",
     "fastify": "^3.0.0",
     "fastify-autoload": "^3.3.1",
     "fastify-cli": "^2.13.0",
     "fastify-plugin": "^3.0.0",
     "fastify-sensible": "^3.1.0",
+    "knex": "^0.95.14",
+    "mysql2": "^2.3.3",
     "nodemon": "^2.0.15"
   },
   "devDependencies": {
+    "@types/config": "0.0.40",
     "@types/jest": "^27.0.3",
+    "@types/knex": "^0.16.1",
     "@types/node": "^15.0.0",
     "@types/tap": "^15.0.0",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
