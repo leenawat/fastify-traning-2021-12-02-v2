@@ -1,12 +1,15 @@
 import { FastifyPluginAsync } from 'fastify'
+import UserModel from '../models/user'
 
 const user: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
+    const userModel = new UserModel(fastify.db)
     // C = CREATE
     fastify.post('/api/users', async function (request, reply) {
         const data: any = request.body
         delete data.uid
-        return await fastify.db('sys_user').insert(request.body)
+        await userModel.save(data)
+        return reply.code(201).send({ message: 'User created' })
     })
 
     // R = READ
@@ -19,7 +22,7 @@ const user: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         const params: any = request.params
         const userId = params.userId
         try {
-            const listUser: any[] = await fastify.db('sys_user').select().where({ uid: userId })
+            const listUser: any[] = await userModel.findByUid(userId)
             if (listUser.length == 1) {
                 return listUser[0]
             } else {
@@ -38,9 +41,9 @@ const user: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         const data: any = request.body
         delete data.uid
         try {
-            const listUser: any[] = await fastify.db('sys_user').select().where({ uid: userId })
+            const listUser: any[] = await userModel.findByUid(userId)
             if (listUser.length == 1) {
-                return await fastify.db('sys_user').update(data).where({ uid: userId })
+                return await userModel.update(userId, data)
             } else {
                 throw new Error('User id: ' + userId + ' not found!')
             }
@@ -54,9 +57,9 @@ const user: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         const params: any = request.params
         const userId = params.userId
         try {
-            const listUser: any[] = await fastify.db('sys_user').select().where({ uid: userId })
+            const listUser: any[] = await userModel.findByUid(userId)
             if (listUser.length == 1) {
-                return await fastify.db('sys_user').delete().where({ uid: userId })
+                return await userModel.delete(userId)
             } else {
                 throw new Error('User id: ' + userId + ' not found!')
             }
