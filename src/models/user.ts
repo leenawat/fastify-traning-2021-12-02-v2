@@ -12,7 +12,7 @@ export default class UserModel {
     async save(data: any) {
         return await this.db('sys_user').insert(data)
     }
-    
+
     async findByUid(userId: any): Promise<any> {
         return await this.db('sys_user')
             .select()

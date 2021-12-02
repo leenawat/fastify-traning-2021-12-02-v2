@@ -1,5 +1,6 @@
 import { FastifyPluginAsync } from 'fastify'
 import UserModel from '../models/user'
+import bcrypt from 'bcryptjs'
 
 const user: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
@@ -8,6 +9,7 @@ const user: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     fastify.post('/api/users', async function (request, reply) {
         const data: any = request.body
         delete data.uid
+        data.password = await bcrypt.hashSync(data.password)
         await userModel.save(data)
         return reply.code(201).send({ message: 'User created' })
     })
